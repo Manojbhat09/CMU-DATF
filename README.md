@@ -23,7 +23,7 @@ See details on *train.py*
 
 To train proposed method;
 ```
-python setup.py develop && CUDA_VISIBLE_DEVICES=2 python train.py --config=config_atgs_cam_nf
+python setup.py develop && CUDA_VISIBLE_DEVICES=2 python train.py --config=atgscene_cam_nf.base --train
 ```
 
 
@@ -32,7 +32,7 @@ python setup.py develop && CUDA_VISIBLE_DEVICES=2 python train.py --config=confi
 Testing will be used by assigning checkpoint to argument *--test_ckpt*;
 Make sure to change the TRAIN flag on the config file to false 
 ```
-python setup.py develop && CUDA_VISIBLE_DEVICES=2 python test.py --config=config_atgs_cam_nf --test_ckpt="xyz.tar"
+python setup.py develop && CUDA_VISIBLE_DEVICES=2 python test.py --config=atgscene_cam_nf.base --test_ckpt="xyz.tar"
 ```
 
 ## Things to do

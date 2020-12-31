@@ -10,7 +10,6 @@ import pdb
 class DESIRE_SGM(nn.Module):
 
     def __init__(self, cfg, device=None, **kwargs):
-
         # Settings 
         decoding_steps = kwargs.get("decoding_steps", cfg.decoding_steps)
         num_candidates = kwargs.get("num_candidates", cfg.num_candidates)

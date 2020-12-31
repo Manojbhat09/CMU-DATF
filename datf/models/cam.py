@@ -5,8 +5,6 @@ import torch.nn as nn
 from .matf import *
 from .model_utils.cam import *
 
-
-
 # CAM
 class CAM(SimpleEncoderDecoder):
     """
@@ -89,11 +87,7 @@ class CAM_NFDecoder(CAM):
         
         self.device = device if not self.cfg else self.cfg.device
 
-        super(CAM_NFDecoder, self).__init__(cfg=cfg, device=device)
-        # super(CAM_NFDecoder, self).__init__(device, agent_embed_dim, nfuture, att_dropout)
-
-        # self.self_attention = SelfAttention(d_model=agent_embed_dim, d_k=agent_embed_dim, d_v=agent_embed_dim, n_head=1, dropout=att_dropout)
-        # self.layer_norm = nn.LayerNorm(agent_embed_dim, eps=1e-6)
+        super(CAM_NFDecoder, self).__init__(cfg=cfg, device=device,  agent_embed_dim=agent_embed_dim, nfuture=nfuture, att_dropout=att_dropout)
 
         self.dynamic_decoder = DynamicDecoder(decoding_steps=decoding_steps, velocity_const=velocity_const)
         self.decoding_steps = decoding_steps    
@@ -208,9 +202,6 @@ class Scene_CAM_NFDecoder(CAM):
         self.device = device if not self.cfg else self.cfg.device
 
         super(Scene_CAM_NFDecoder, self).__init__(cfg=cfg, device=device)
-
-        # self.self_attention = SelfAttention(d_model=agent_embed_dim, d_k=agent_embed_dim, d_v=agent_embed_dim, n_head=1, dropout=att_dropout)
-        # self.layer_norm = nn.LayerNorm(agent_embed_dim, eps=1e-6)
 
         self.cnn_model = NewModelShallowCNN()
         self.context_fusion = ContextFusion(hidden_size=agent_embed_dim)
@@ -342,10 +333,8 @@ class Global_Scene_CAM_NFDecoder(CAM):
         att = kwargs.get("att", cfg.att)
         self.cfg = cfg 
         self.device = device if not self.cfg else self.cfg.device
+        
         super(Global_Scene_CAM_NFDecoder, self).__init__( cfg, device=device, **kwargs)
-
-        # self.self_attention = SelfAttention(d_model=agent_embed_dim, d_k=agent_embed_dim, d_v=agent_embed_dim, n_head=1, dropout=att_dropout)
-        # self.layer_norm = nn.LayerNorm(agent_embed_dim, eps=1e-6)
 
         self.cnn_model = NewModelShallowCNN()
         self.context_fusion = ContextFusion(hidden_size=agent_embed_dim)

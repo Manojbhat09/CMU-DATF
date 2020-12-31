@@ -14,7 +14,7 @@ import glob
 import pdb 
 from tqdm import tqdm
 import sys
-_data_dir = './data/carla'
+
 PLOT = 0
 
 class ParallelSim(object):
@@ -153,7 +153,7 @@ class CarlaDataset(Dataset):
         self.ploss_type = kwargs.get("ploss_type", cfg.ploss_type)
         self.intrinsic_rate = kwargs.get("intrinsic_rate", cfg.intrinsic_rate)
         self.max_distance = kwargs.get("max_distance",cfg.max_distance)
-        self.data_dir = _data_dir
+        self.data_dir = kwargs.get("data_dir", cfg.data_dir)
         self.data_partition = data_partition
         self.multi_agent = kwargs.get("multi_agent", cfg.multi_agent)
         self.sample_stride = kwargs.get("sample_stride", cfg.sample_stride)

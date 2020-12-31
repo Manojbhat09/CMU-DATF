@@ -25,26 +25,38 @@ __allcollate__ = {
 }
 
 def build_dataset( **kwargs):
+    """This function builds the dataset required to train/test/validate the model
+    If config has test_set specified, and set to True, then use only test dataset (To only Test the model on Test set with no labels), 
+        If set to False, then use the validation dataset (Only Test on validation dataset). 
+    If config has train specified, then train and validation set will be selected
+    Else use validation set to validate and test to publish the test (unseen) data predictions
+    
+    Returns:
+        <dataset>: Train/validation dataset
+        <val_dataset>: validation/Test dataset
+        <collate_fn>: collate function in particular to the dataset choosed
+    """
     cfg=kwargs.get('cfg')
     train=kwargs.get('train', cfg.train if hasattr(cfg, "train") else False )
     if hasattr(cfg, "test_set"):
         if cfg.test_set:
             print("[LOG] Working on given test set (Test dataset)")
-            dataset = __all__[cfg.dataset](cfg, 'test', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
+            val_dataset = __all__[cfg.dataset](cfg, 'test', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
+            dataset = None
         else:
             print("[LOG] Working on given test/val set")
-            dataset = __all__[cfg.dataset](cfg, 'val', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
-        collate_fn = __allcollate__[cfg.dataset]
-        return dataset, None , collate_fn 
+            val_dataset = __all__[cfg.dataset](cfg, 'val', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
+            dataset = None
 
-    if train:
+    elif train:
         print("[LOG] Working on train and val set")
         dataset = __all__[cfg.dataset](cfg, 'train', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
         val_dataset = __all__[cfg.dataset](cfg, 'val', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
-        collate_fn = __allcollate__[cfg.dataset]
+
     else:
         print("[LOG] Wokring on test and val set")
-        val_dataset = __all__[cfg.dataset](cfg, 'val', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
-        dataset = __all__[cfg.dataset](cfg, 'test', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
-        collate_fn = __allcollate__[cfg.dataset]
+        dataset = __all__[cfg.dataset](cfg, 'val', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
+        val_dataset = __all__[cfg.dataset](cfg, 'test', map_version=cfg.map_version, sampling_rate=cfg.sampling_rate)
+    
+    collate_fn = __allcollate__[cfg.dataset]
     return dataset, val_dataset, collate_fn 

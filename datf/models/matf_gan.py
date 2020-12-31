@@ -26,9 +26,6 @@ class MATF_Gen(MATF):
         self.cfg = cfg 
         self.device = device if not self.cfg else self.cfg.device
 
-        # super(MATF_Gen, self).__init__(cfg, device, agent_embed_dim, nfuture,
-        #          lstm_layers, lstm_dropout, noise_dim, pooling_size, encoder_type, 
-        #          scene_channels, scene_dropout, freeze_resnet)
         super(MATF_Gen, self).__init__(cfg, device)
 
 
@@ -85,9 +82,6 @@ class MATF_Disc(MATF):
         self.cfg = cfg 
         self.device = device if not self.cfg else self.cfg.device
 
-        # super(MATF_Disc, self).__init__(device, agent_embed_dim, nfuture, 
-        #                                 lstm_layers, lstm_dropout, noise_dim, pooling_size, encoder_type, 
-        #                                 scene_channels, scene_dropout, freeze_resnet)
         super(MATF_Disc, self).__init__(cfg, device)
 
         self.classifier = Classifier(device, agent_embed_dim, classifier_hidden=disc_hidden, dropout=disc_dropout)

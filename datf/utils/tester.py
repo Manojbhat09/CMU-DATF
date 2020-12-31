@@ -80,14 +80,12 @@ class ModelTester: # GAN
             _data_dir = '/home/spalab/carla_shpark/'
             self.map_file = lambda scene_id: [os.path.join(_data_dir, x[0], x[1], x[2], 'map/v1.3', x[3] ) + '.pkl' for x in scene_id]
 
-        # self.load_checkpoint(args.test_ckpt)
+        if hasattr(args, "test_ckpt")
+            self.load_checkpoint(args.test_ckpt)
 
     def load_checkpoint(self, ckpt):
         checkpoint = torch.load(ckpt)
         self.model.load_state_dict(checkpoint['model_state'], strict=False)
-
-        # self.optimizer.load_state_dict(checkpoint['optimizer'])
-        # self.start_epoch = checkpoint['epoch']
     
     def run(self):
         if self.model_name in ["SimpleEncoderDecoder", "SocialPooling", "MATF"]:

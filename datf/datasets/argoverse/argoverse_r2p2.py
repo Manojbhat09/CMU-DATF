@@ -11,10 +11,6 @@ from torchvision import transforms
 import torch.nn.functional as F
 from torch.utils.data.dataset import Dataset
 
-# _data_dir = './data/argoverse'
-
-_data_dir = '/data/datasets/datf/fl/home/spalab/argoverse_shpark/argoverse-forecasting-from-forecasting'
-
 class ParallelSim(object):
     def __init__(self, processes):
         self.pool = mp.Pool(processes=processes)
@@ -152,7 +148,7 @@ class ArgoverseDataset_R2P2(Dataset):
         self.ploss_type = kwargs.get("ploss_type", cfg.ploss_type)
         self.intrinsic_rate = kwargs.get("intrinsic_rate", cfg.intrinsic_rate)
         self.max_distance = kwargs.get("max_distance",cfg.max_distance)
-        self.data_dir = _data_dir
+        self.data_dir = kwargs.get("data_dir", cfg.data_dir)
         self.data_partition = data_partition
         self.multi_agent = kwargs.get("multi_agent", cfg.multi_agent)
         self.sample_stride = kwargs.get("sample_stride", cfg.sample_stride)

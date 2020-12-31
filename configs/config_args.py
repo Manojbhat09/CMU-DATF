@@ -9,10 +9,20 @@ import torch
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+def update_configs(config_instance, configs):
+    if configs.train:
+        local_vars = config_instance.update_config_train()
+    else:
+        local_vars = config_instance.update_config_test()
+
+    configs.update(local_vars)
+    return configs
+
 def parse_train_configs():
     parser = argparse.ArgumentParser(description='The Implementation using PyTorch')
 
-    parser.add_argument('--config', type=str, default="config_simple", help="config file name")
+    parser.add_argument('--config', type=str, default="simple/base.py", help="config file name")
+    parser.add_argument('--train', action='store_true', help="Start and use the train configs, else use the test configs from custom config file")
 
     # Training Tag
     parser.add_argument('--tag', type=str, help="Add a tag to the saved folder")
@@ -27,6 +37,7 @@ def parse_train_configs():
 
     # Dataset Parameters
     parser.add_argument('--dataset', type=str, default='argoverse', help="argoverse | nuscenes | carla")
+    parser.add_argument('--data_dir', type=str, default='/data/datasets/datf/fl/home/spalab/argoverse_shpark/argoverse-forecasting-from-forecasting', help="Specify the directory location of particular dataset")
     parser.add_argument('--train_cache', default=None, help="")
     parser.add_argument('--val_cache', default=None, help="")
 
@@ -95,14 +106,12 @@ def parse_train_configs():
     args = parser.parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_devices
 
+    # import all the configs from the custom config files
     configs = EasyDict(vars(parser.parse_args()))
     configs.device = torch.device('cpu' if configs.no_cuda else 'cuda')
     configs.ngpus_per_node = torch.cuda.device_count()
-    configs.pin_memory = True
-    # import pdb; pdb.set_trace()
-    config = importlib.import_module(configs.config)
-    configs = config.update_config(configs)
-    # configs = eval(configs.config).update_configs(configs)
+    config_custom = importlib.import_module(configs.config)
+    configs = update_configs(config_custom, configs)
     
     configs.checkpoints_dir = os.path.join(configs.root_dir, 'checkpoints', configs.TAG)
     configs.logs_dir = os.path.join(configs.root_dir, 'logs', configs.TAG)
@@ -113,6 +122,7 @@ def parse_train_configs():
         os.makedirs(configs.logs_dir)
 
     return configs
+    
 
 if __name__=="__main__":
     parse_train_configs()

@@ -38,7 +38,6 @@ class SimpleEncoderDecoder(nn.Module):
 
     def encoder(self, past_agents_traj, past_agents_traj_len, future_agent_masks):
         # Encode Scene and Past Agent Paths
-        
         past_agents_traj = past_agents_traj.permute(1, 0, 2)  # [B X T X D] -> [T X B X D]
 
         agent_lstm_encodings = self.agent_encoder(past_agents_traj, past_agents_traj_len).squeeze(0) # [B X H]

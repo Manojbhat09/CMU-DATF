@@ -3,7 +3,6 @@ from setuptools import setup, find_packages
 import subprocess
 from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
-
 def get_git_commit_number():
     if not os.path.exists('.git'):
         return '0000000'
@@ -33,7 +32,7 @@ if __name__ == '__main__':
     setup(
         name='datf',
         version=version,
-        description='DATF a general repository for trajectory prediction experiments',
+        description='DATF a general repository for Multi-Modal trajectory prediction experiments',
         install_requires=[
             'numpy',
             'torch>=1.1',
@@ -41,8 +40,8 @@ if __name__ == '__main__':
             'easydict',
             'pyyaml'
         ],
-        author='Manoj Bhat & Seong Hyeon Park',
-        author_email='manojbhat09@gmail.com',
+        author='Seong Hyeon Park & Manoj Bhat & All authors of DATF',
+        author_email='shpark@spa.hanyang.ac.kr',
         license='Apache License 2.0',
         packages=find_packages(exclude=['tools', 'data', 'output']),
         cmdclass={'build_ext': BuildExtension}
